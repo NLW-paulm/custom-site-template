@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-# Provision WordPress Stable
+# Provision stable Omeka-s 
 
 # fetch the first host as the primary domain. If none is available, generate a default using the site name
 DOMAIN=`get_primary_host "${VVV_SITE_NAME}".test`
 SITE_TITLE=`get_config_value 'site_title' "${DOMAIN}"`
-WP_VERSION=`get_config_value 'wp_version' 'latest'`
-WP_TYPE=`get_config_value 'wp_type' "single"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
 
@@ -20,6 +18,19 @@ mkdir -p ${VVV_PATH_TO_SITE}/log
 touch ${VVV_PATH_TO_SITE}/log/nginx-error.log
 touch ${VVV_PATH_TO_SITE}/log/nginx-access.log
 
+# Download Omeka-s via git install method
+git clone https://github.com/omeka/omeka-s.git "${VVV_PATH_TO_SITE}/public_html"
+# perform first time setup
+cd "${VVV_PATH_TO_SITE}/public_html"
+npm install --global gulp-cli 
+gulp init 
+
+# Copy across database.ini
+
+#
+
+#set up user data
+: << 'SANKEND'
 if [ "${WP_TYPE}" != "none" ]; then
 
   # Install and configure the latest stable version of WordPress
@@ -54,6 +65,7 @@ PHP
     noroot wp core update --version="${WP_VERSION}"
   fi
 fi
+SANKEND
 
 cp -f "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf.tmpl" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
 
