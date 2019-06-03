@@ -19,9 +19,11 @@ touch ${VVV_PATH_TO_SITE}/log/nginx-error.log
 touch ${VVV_PATH_TO_SITE}/log/nginx-access.log
 
 # Download Omeka-s via git install method
-git clone https://github.com/omeka/omeka-s.git "${VVV_PATH_TO_SITE}/public_html"
+#git clone https://github.com/omeka/omeka-s.git "${VVV_PATH_TO_SITE}/public_html"
 # perform first time setup
 cd "${VVV_PATH_TO_SITE}/public_html"
+
+npm install
 npm install --global gulp-cli 
 gulp init 
 
