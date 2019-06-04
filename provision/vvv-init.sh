@@ -32,13 +32,15 @@ gulp init
 SANKE1
 
 #download latest release
-wget "https://github.com/omeka/omeka-s/releases/download/v1.4.0/omeka-s-1.4.0.zip" -O $TMPFILE
+echo -e "\ndownloading Omeka-s"
+wget -q "https://github.com/omeka/omeka-s/releases/download/v1.4.0/omeka-s-1.4.0.zip" -O $TMPFILE
 #unzip
+echo -e "\unzipping Omeka-s"
 unzip -q -d "${VVV_PATH_TO_SITE}/temp" $TMPFILE
 #remove tmpfile
 rm $TMPFILE
 #move everything into the public_html folder
-mv "${VVV_PATH_TO_SITE}/temp/omeka-s/*" "${VVV_PATH_TO_SITE}/public_html"
+mv "${VVV_PATH_TO_SITE}/temp/omeka-s/" "${VVV_PATH_TO_SITE}/public_html/"
 
 # Copy across database.ini
 
