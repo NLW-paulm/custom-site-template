@@ -6,6 +6,7 @@ DOMAIN=`get_primary_host "${VVV_SITE_NAME}".test`
 SITE_TITLE=`get_config_value 'site_title' "${DOMAIN}"`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
+TMPFILE=`mktemp`
 
 # Make a database, if we don't already have one
 echo -e "\nCreating database '${DB_NAME}' (if it's not already there)"
@@ -18,14 +19,24 @@ mkdir -p ${VVV_PATH_TO_SITE}/log
 touch ${VVV_PATH_TO_SITE}/log/nginx-error.log
 touch ${VVV_PATH_TO_SITE}/log/nginx-access.log
 
+: << 'SANKE1'
+# git npm updates not work, so temp fix is to pull from url and install.
 # Download Omeka-s via git install method
-#git clone https://github.com/omeka/omeka-s.git "${VVV_PATH_TO_SITE}/public_html"
+git clone https://github.com/omeka/omeka-s.git "${VVV_PATH_TO_SITE}/public_html"
 # perform first time setup
 cd "${VVV_PATH_TO_SITE}/public_html"
 
 npm install
 npm install --global gulp-cli 
 gulp init 
+SANKE1
+
+#download latest release
+wget "https://github.com/omeka/omeka-s/releases/download/v1.4.0/omeka-s-1.4.0.zip" -O $TMPFILE
+#unzip
+unzip -d "${VVV_PATH_TO_SITE}/public_html" $TMPFILE
+#remove tmpfile
+rm $TMPFILE
 
 # Copy across database.ini
 
